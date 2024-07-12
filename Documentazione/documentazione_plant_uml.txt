@@ -1,0 +1,57 @@
+@startuml
+
+class Vertex {
+    + double x
+    + double y
+    + double z
+    + calculateDistance(const Vertex& v1, const Vertex& v2) : double
+    + crossProduct(const Vertex& v1, const Vertex& v2) : Vertex
+    + dotProduct(const Vertex& v1, const Vertex& v2) : double
+    + subtract(const Vertex& v1, const Vertex& v2) : Vertex
+    + compute_t(const Vertex& v, const Vertex& point, const Vertex& direction) : double
+}
+
+class Fracture {
+    + int id
+    + int numVertices
+    + vector<Vertex> vertices
+    + readFractures(string filename) : vector<Fracture>
+    + fractureIntersection(const Fracture& f1, const Fracture& f2) : bool
+    + projectFractureOnAxis(const Fracture& fracture, const Vertex& axis) : Projection
+}
+
+class Trace {
+    + int traceId
+    + int fractureId1
+    + int fractureId2
+    + Vertex start
+    + Vertex end
+    + bool tips1
+    + bool tips2
+    + double length
+    + computeTraces(const vector<Fracture>& fractures) : vector<Trace>
+    + writeTraces(const vector<Trace>& traces, const string& filename) : void
+    + classifyAndWriteTracesByFracture(const vector<Trace>& traces, const vector<Fracture>& fractures, const string& filename) : void
+    + merge(vector<Trace>& v, const unsigned int& sx, const unsigned int& cx, const unsigned int& dx): void
+}
+
+class Plane {
+    + Vertex normal
+    + double d
+    + calculatePlane(const Fracture& fracture) : Plane
+    + isPointOnEdge(const Vertex& v, const Vertex& a, const Vertex& b) : bool
+    + isPassante(const Vertex& p1, const Vertex& p2, const Fracture& fracture) : bool
+}
+
+class Projection {
+    + double min
+    + double max
+}
+
+Fracture "1" --> "many" Vertex : consists of
+Trace "many" --> "many" Fracture : generated from
+Plane "1" --> "1" Fracture : generated from
+Projection --> Fracture
+[22:32]
+Trace "1" --> "2" Vertex : consists of
+@enduml
