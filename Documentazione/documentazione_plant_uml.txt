@@ -52,6 +52,5 @@ Fracture "1" --> "many" Vertex : consists of
 Trace "many" --> "many" Fracture : generated from
 Plane "1" --> "1" Fracture : generated from
 Projection --> Fracture
-[22:32]
 Trace "1" --> "2" Vertex : consists of
 @enduml
