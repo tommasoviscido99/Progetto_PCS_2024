@@ -48,7 +48,10 @@ list(APPEND DFN_INCLUDE ${DFN_includes})
 add_executable(${PROJECT_NAME}
 	main.cpp
 	${DFN_SOURCES}
-    ${DFN_HEADERS})
+    ${DFN_HEADERS}
+    fracture.hpp
+    src/fracture.cpp
+    fracture_tests.hpp)
 
 target_link_libraries(${PROJECT_NAME} ${DFN_LINKED_LIBRARIES})
 target_include_directories(${PROJECT_NAME} PRIVATE ${DFN_INCLUDE})
