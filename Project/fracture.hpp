@@ -1,7 +1,6 @@
 #ifndef FRACTURE_HPP
 #define FRACTURE_HPP
 
-#include <Eigen/Eigen>
 #include <vector>
 #include <string>
 
