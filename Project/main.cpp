@@ -1,6 +1,5 @@
 #include "fracture.hpp"
 #include <iostream>
-#include <vector>
 #include "fracture_tests.hpp"
 #include <gtest/gtest.h>
 
