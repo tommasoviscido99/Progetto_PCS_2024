@@ -187,7 +187,16 @@ Vertex lineEdgeIntersection(const Vertex& point, const Vertex& direction, const 
 
 // Function to compute the parameter t for a given point and direction
 double compute_t(const Vertex& v, const Vertex& point, const Vertex& direction) {
-    return (v.x - point.x) / direction.x;
+    if (direction.x != 0) {
+        return (v.x - point.x) / direction.x;
+    } else if (direction.y != 0) {
+        return (v.y - point.y) / direction.y;
+    } else if (direction.z != 0) {
+        return (v.z - point.z) / direction.z;
+    } else {
+        cerr << "Direction vector cannot be zero" << endl;
+        return 1;
+    }
 }
 
 // Function to compare pairs of doubles and vertices based on the double value
