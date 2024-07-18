@@ -90,7 +90,7 @@ Projection projectFractureOnAxis(const Fracture& fracture, const Vertex& axis) {
     double min = dotProduct(axis, fracture.vertices[0]);
     double max = min;
 
-    for (int i = 1; i < fracture.numVertices; ++i) {
+    for (int i = 1; i < fracture.numVertices; i++) {
         double projection = dotProduct(axis, fracture.vertices[i]);
         if (projection < min) min = projection;
         if (projection > max) max = projection;
@@ -103,9 +103,9 @@ Projection projectFractureOnAxis(const Fracture& fracture, const Vertex& axis) {
 bool fractureIntersection(const Fracture& f1, const Fracture& f2) {
     vector<Vertex> axes;
 
-    for (int i = 0; i < f1.numVertices; ++i) {
+    for (int i = 0; i < f1.numVertices; i++) {
         Vertex edge1 = subtract(f1.vertices[(i + 1) % f1.numVertices], f1.vertices[i]);
-        for (int j = 0; j < f2.numVertices; ++j) {
+        for (int j = 0; j < f2.numVertices; j++) {
             Vertex edge2 = subtract(f2.vertices[(j + 1) % f2.numVertices], f2.vertices[j]);
             axes.push_back(crossProduct(edge1, edge2));
         }
@@ -173,7 +173,7 @@ Vertex lineEdgeIntersection(const Vertex& point, const Vertex& direction, const 
     }
 
     Vector3d b = p0v10;
-    Vector3d t = A.inverse() * b;
+    Vector3d t = A.colPivHouseholderQr().solve(b);
 
     Vector3d intersection = p0 + t(0) * d;
 
@@ -208,7 +208,7 @@ bool isPointOnEdge(const Vertex& p, const Vertex& v1, const Vertex& v2) {
 bool isPassante(const Vertex& p1, const Vertex& p2, const Fracture& fracture) {
     bool onEdge1 = false, onEdge2 = false;
     const auto& vertices = fracture.vertices;
-    for (size_t i = 0; i < vertices.size(); ++i) {
+    for (size_t i = 0; i < vertices.size(); i++) {
         Vertex v1 = vertices[i];
         Vertex v2 = vertices[(i + 1) % vertices.size()];
         if (isPointOnEdge(p1, v1, v2)) onEdge1 = true;
@@ -237,8 +237,8 @@ vector<Trace> computeTraces(const vector<Fracture> &fractures) {
     vector<Trace> traces;
     int traceCounter = 0;
 
-    for (size_t i = 0; i < fractures.size(); ++i) {
-        for (size_t j = i + 1; j < fractures.size(); ++j) {
+    for (size_t i = 0; i < fractures.size(); i++) {
+        for (size_t j = i + 1; j < fractures.size(); j++) {
             if (fractureIntersection(fractures[i], fractures[j])) {
                 Plane p1 = calculatePlane(fractures[i]);
                 Plane p2 = calculatePlane(fractures[j]);
@@ -249,7 +249,7 @@ vector<Trace> computeTraces(const vector<Fracture> &fractures) {
                 const auto& vertices1 = fractures[i].vertices;
                 const auto& vertices2 = fractures[j].vertices;
 
-                for (size_t k = 0; k < vertices1.size(); ++k) {
+                for (size_t k = 0; k < vertices1.size(); k++) {
                     Vertex v1 = vertices1[k];
                     Vertex v2 = vertices1[(k + 1) % vertices1.size()];
                     Vertex intersection = lineEdgeIntersection(line[0], line[1], v1, v2);
@@ -258,7 +258,7 @@ vector<Trace> computeTraces(const vector<Fracture> &fractures) {
                     }
                 }
 
-                for (size_t k = 0; k < vertices2.size(); ++k) {
+                for (size_t k = 0; k < vertices2.size(); k++) {
                     Vertex v1 = vertices2[k];
                     Vertex v2 = vertices2[(k + 1) % vertices2.size()];
                     Vertex intersection = lineEdgeIntersection(line[0], line[1], v1, v2);
