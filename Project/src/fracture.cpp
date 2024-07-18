@@ -168,7 +168,7 @@ Vertex lineEdgeIntersection(const Vertex& point, const Vertex& direction, const 
     A.col(2) = edge.cross(d);
 
     double detA = A.determinant();
-    if (abs(detA) < 1e-6) {
+    if (abs(detA) < 1e-12) {
         return { NAN, NAN, NAN };
     }
 
@@ -197,10 +197,10 @@ bool comparePairs(const pair<double, Vertex>& a, const pair<double, Vertex>& b) 
 
 // Function to check if a point is on an edge
 bool isPointOnEdge(const Vertex& p, const Vertex& v1, const Vertex& v2) {
-    double epsilon = 1e-6;
-    double d1 = sqrt(pow(p.x - v1.x, 2) + pow(p.y - v1.y, 2) + pow(p.z - v1.z, 2));
-    double d2 = sqrt(pow(p.x - v2.x, 2) + pow(p.y - v2.y, 2) + pow(p.z - v2.z, 2));
-    double d3 = sqrt(pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2) + pow(v1.z - v2.z, 2));
+    double epsilon = 1e-12;
+    double d1 = calculateDistance(p, v1);
+    double d2 = calculateDistance(p, v2);
+    double d3 = calculateDistance(v1, v2);
     return fabs(d1 + d2 - d3) < epsilon;
 }
 
